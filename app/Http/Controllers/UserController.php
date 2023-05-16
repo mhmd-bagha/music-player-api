@@ -18,7 +18,7 @@ class UserController extends Controller
 
     }
 
-    public function signup($data): string
+    public function signup($data): Response
     {
         $createUser = User::create($data);
         if ($createUser)
