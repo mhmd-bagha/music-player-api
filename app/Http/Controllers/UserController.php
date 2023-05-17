@@ -42,6 +42,11 @@ class UserController extends Controller
             return response(['message' => 'an error has occurred', 'status' => 422], 422);
     }
 
+    public function getUser(): Response
+    {
+        return response(['user' => auth()->user(), 'status' => 200], 200);
+    }
+
     private function checkExistUser($data): string
     {
         return JWTAuth::attempt($data);
