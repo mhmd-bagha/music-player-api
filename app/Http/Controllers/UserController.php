@@ -28,8 +28,10 @@ class UserController extends Controller
     public function signup($data): Response
     {
         $createUser = User::create($data);
+        $jwtToken = JWTAuth::fromUser($createUser);
+
         if ($createUser)
-            return response(['message' => 'user created successfully', 'status' => 201], 201);
+            return response(['message' => 'user created successfully', 'token' => $this->createToken($jwtToken, $createUser), 'status' => 201], 201);
         else
             return response(['message' => 'an error has occurred', 'status' => 422], 422);
     }
