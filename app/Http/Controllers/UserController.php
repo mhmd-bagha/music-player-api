@@ -23,9 +23,6 @@ class UserController extends Controller
 
         $datavalidated = $datavalidated->validated();
 
-        // convert password to hash
-        array_merge($datavalidated, ['password' => Hash::make($datavalidated['password'])]);
-
         if ($token = $this->checkExistUser($datavalidated))
             return response(['message' => 'successfully login', 'token' => $this->createToken($token), 'status' => 200], 200);
         else
@@ -34,6 +31,8 @@ class UserController extends Controller
 
     public function signup($data): Response
     {
+        // hashing password
+        array_merge($data, ['password' => Hash::make($data['password'])]);
         $createUser = User::create($data);
         $jwtToken = JWTAuth::fromUser($createUser);
 
