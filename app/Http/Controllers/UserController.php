@@ -32,7 +32,7 @@ class UserController extends Controller
     public function signup($data): Response
     {
         // hashing password
-        array_merge($data, ['password' => Hash::make($data['password'])]);
+        $data = array_merge($data, ['password' => Hash::make($data['password'])]);
         $createUser = User::create($data);
         $jwtToken = JWTAuth::fromUser($createUser);
 
