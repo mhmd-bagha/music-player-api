@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticable implements JWTSubject
 {
     use HasFactory;
+    protected $fillable = ['email', 'password', 'first_name', 'last_name'];
 
     public function getJWTIdentifier()
     {
