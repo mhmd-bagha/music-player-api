@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -14,10 +15,15 @@ class UserController extends Controller
     {
         $datavalidated = Validator::make($request->post(), [
             'email' => 'required',
-            'password' => 'required|confirmed|min:6'
+            'password' => 'required|min:6'
         ]);
         if ($datavalidated->fails())
             return response(['message' => $datavalidated->errors(), 'status' => 417], 417);
+
+        $datavalidated = $datavalidated->validated();
+
+        // convert password to hash
+        array_merge($datavalidated, ['password' => Hash::make($datavalidated['password'])]);
 
         if ($token = $this->checkExistUser($datavalidated))
             return response(['message' => 'successfully login', 'token' => $this->createToken($token), 'status' => 200], 200);
