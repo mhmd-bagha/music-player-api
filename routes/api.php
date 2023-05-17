@@ -17,4 +17,5 @@ use \App\Http\Controllers\UserController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
+    Route::post('/user', [UserController::class, 'getUser'])->middleware('jwt.auth');
 });
