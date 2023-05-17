@@ -16,7 +16,13 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required|confirmed|min:6'
         ]);
+        if ($datavalidated->fails())
+            return response(['message' => $datavalidated->errors(), 'status' => 417], 417);
 
+        if ($token = $this->checkExistUser($datavalidated))
+            return response(['message' => 'successfully login', 'token' => $this->createToken($token), 'status' => 200], 200);
+        else
+            $this->signup($datavalidated);
     }
 
     public function signup($data): Response
