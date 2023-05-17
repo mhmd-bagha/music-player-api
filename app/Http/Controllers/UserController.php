@@ -13,19 +13,19 @@ class UserController extends Controller
 {
     public function login(Request $request, User $model): Response
     {
-        $datavalidated = Validator::make($request->post(), [
+        $dataValidated = Validator::make($request->post(), [
             'email' => 'required',
             'password' => 'required|min:6'
         ]);
-        if ($datavalidated->fails())
-            return response(['message' => $datavalidated->errors(), 'status' => 417], 417);
+        if ($dataValidated->fails())
+            return response(['message' => $dataValidated->errors(), 'status' => 417], 417);
 
-        $datavalidated = $datavalidated->validated();
+        $dataValidated = $dataValidated->validated();
 
-        if ($token = $this->checkExistUser($datavalidated))
+        if ($token = $this->checkExistUser($dataValidated))
             return response(['message' => 'successfully login', 'token' => $this->createToken($token), 'status' => 200], 200);
         else
-            return $this->signup($datavalidated);
+            return $this->signup($dataValidated);
     }
 
     public function signup($data): Response
