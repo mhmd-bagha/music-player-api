@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -50,6 +51,27 @@ class UserController extends Controller
     private function checkExistUser($data): string
     {
         return JWTAuth::attempt($data);
+    }
+
+    public function refreshToken()
+    {
+        if (!request()->header('Authorization'))
+            return response(['message' => 'bearer token is required', 'status' => 500], 500);
+
+        // check the has expired token and regenerate token then get user
+        try {
+            $user = JWTAuth::authenticate();
+        } catch (TokenExpiredException $e) {
+            JWTAuth::setToken(JWTAuth::refresh());
+            $user = JWTAuth::authenticate();
+        }
+
+        if ($user) {
+            $createToken = JWTAuth::fromUser($user);
+            return response(['token' => $this->createToken($createToken, $user), 'status' => 200], 200);
+        } else {
+            return response(['message' => 'this is user not found', 'status' => 401], 401);
+        }
     }
 
     protected function createToken(string $token, $user = null): array
