@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
-    public function login(Request $request, User $model)
+    public function login(Request $request, User $model): Response
     {
         $datavalidated = Validator::make($request->post(), [
             'email' => 'required',
