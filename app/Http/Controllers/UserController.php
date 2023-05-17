@@ -28,7 +28,7 @@ class UserController extends Controller
         if ($token = $this->checkExistUser($datavalidated))
             return response(['message' => 'successfully login', 'token' => $this->createToken($token), 'status' => 200], 200);
         else
-            $this->signup($datavalidated);
+            return $this->signup($datavalidated);
     }
 
     public function signup($data): Response
