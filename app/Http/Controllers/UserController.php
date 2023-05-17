@@ -47,7 +47,7 @@ class UserController extends Controller
         return response(['user' => auth()->user(), 'status' => 200], 200);
     }
 
-    private function checkExistUser($data): string
+    private function checkExistUser($data): string|bool
     {
         return JWTAuth::attempt($data);
     }
