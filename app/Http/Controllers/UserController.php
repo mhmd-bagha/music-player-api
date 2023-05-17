@@ -32,4 +32,14 @@ class UserController extends Controller
     {
         return JWTAuth::attempt($data);
     }
+
+    protected function createToken(string $token, $user = null): array
+    {
+        $user = ($auth = auth()->user()) ? $auth : $user;
+
+        return [
+            'access_token' => $token,
+            'user' => $user
+        ];
+    }
 }
