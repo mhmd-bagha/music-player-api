@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -27,8 +28,8 @@ class UserController extends Controller
             return response(['message' => 'an error has occurred', 'status' => 422], 422);
     }
 
-    private function checkExistUser($email): bool
+    private function checkExistUser($data): string
     {
-        return User::where('email', $email)->first()->exists();
+        return JWTAuth::attempt($data);
     }
 }
