@@ -48,13 +48,13 @@ class UserController extends Controller
 
             $user = auth()->user();
             $this->setUserRedis($user);
-            return response(['user' => $user, 'status' => 200], 200);
 
         } else {
 
-            return response(['user' => $this->getUserRedis(), 'status' => 200], 200);
+            $user = $this->getUserRedis();
 
         }
+        return response(['user' => $user, 'status' => 200], 200);
     }
 
     public function getUserRedis()
