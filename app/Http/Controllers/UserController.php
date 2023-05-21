@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -43,7 +44,28 @@ class UserController extends Controller
 
     public function getUser(): Response
     {
-        return response(['user' => auth()->user(), 'status' => 200], 200);
+        if (!$this->getUserRedis()) {
+
+            $user = auth()->user();
+            $this->setUserRedis($user);
+
+        } else {
+
+            $user = $this->getUserRedis();
+
+        }
+        return response(['user' => $user, 'status' => 200], 200);
+    }
+
+    public function getUserRedis()
+    {
+        $user = Redis::get('user');
+        return json_decode($user);
+    }
+
+    public function setUserRedis($user)
+    {
+        Redis::set('user', $user);
     }
 
     private function checkExistUser($data): string|bool
