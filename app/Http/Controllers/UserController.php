@@ -59,7 +59,8 @@ class UserController extends Controller
 
     public function getUserRedis()
     {
-        return Redis::get('user');
+        $user = Redis::get('user');
+        return json_decode($user);
     }
 
     public function setUserRedis($user)
