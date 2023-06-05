@@ -34,13 +34,16 @@ class UserController extends Controller
     {
         // hashing password
         $data = array_merge($data, ['password' => Hash::make($data['password'])]);
-        $createUser = User::create($data);
-        $jwtToken = JWTAuth::fromUser($createUser);
 
-        if ($createUser)
+        try {
+            $createUser = User::create($data);
+            $jwtToken = JWTAuth::fromUser($createUser);
+
             return response()->json(['message' => 'user created successfully', 'token' => $this->createToken($jwtToken, $createUser), 'status' => 201], 201);
-        else
+
+        } catch (\Exception $e) {
             return response()->json(['message' => 'an error has occurred', 'status' => 422], 422);
+        }
     }
 
     public function getUser(): JsonResponse
