@@ -39,9 +39,6 @@ class Handler extends ExceptionHandler
         if ($e instanceof TokenExpiredException)
             return response(['message' => 'Token has expired', 'status' => 401], 401);
 
-        if ($request->is('api/*') || $request->wantsJson())
-            return response(['message' => 'Token has expired', 'status' => 401], 401);
-
         return parent::render($request, $e);
     }
 }
