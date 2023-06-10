@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\AlbumController;
+use \App\Http\Controllers\SongController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,5 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('album')->group(function () {
     Route::post('/all', [AlbumController::class, 'albums']);
+    Route::post('/get/{album}', [SongController::class, 'songsAlbums']);
 });
