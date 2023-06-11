@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('image');
             $table->string('time');
+            $table->string('src');
             $table->bigInteger('album_id');
             $table->timestamps();
         });
