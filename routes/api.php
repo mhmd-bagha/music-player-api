@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\UserController;
+use \App\Http\Controllers\AlbumController;
+use \App\Http\Controllers\SongController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('auth')->group(function () {
+    Route::post('/login', [UserController::class, 'login']);
+    Route::post('/user', [UserController::class, 'getUser'])->middleware('jwt.auth');
+    Route::post('/refresh-token', [UserController::class, 'refreshToken'])->middleware('jwt.refresh');
+});
+
+Route::prefix('album')->group(function () {
+    Route::post('/all', [AlbumController::class, 'albums']);
+    Route::post('/get/{album}', [SongController::class, 'songsAlbums']);
 });
