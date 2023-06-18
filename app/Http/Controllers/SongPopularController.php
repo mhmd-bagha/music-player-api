@@ -31,4 +31,19 @@ class SongPopularController extends Controller
 
         return ($addSongLike) ? response()->json(['message' => 'song added successfully', 'status' => 200]) : response()->json(['message' => 'an error has occurred', 'status' => 500]);
     }
+
+    public function removeSongLike(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->post(), [
+            'song_id' => 'required'
+        ]);
+        if ($validator->fails())
+            return response()->json(['message' => $validator->errors(), 'status' => 417], 417);
+
+        $songId = $validator->validated()['song_id'];
+
+        $removeSong = SongPopular::where('id', $songId)->where('user_id', $request->user_id)->first()->delete();
+
+        return ($removeSong) ? response()->json(['message' => 'song removed successfully', 'status' => 200]) : response()->json(['message' => 'an error has occurred', 'status' => 500]);
+    }
 }
