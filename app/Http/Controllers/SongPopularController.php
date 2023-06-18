@@ -25,7 +25,7 @@ class SongPopularController extends Controller
             return response()->json(['message' => $validator->errors(), 'status' => 417], 417);
 
         $songId = $validator->validated()['song_id'];
-        $data = [$songId, $request->user_id];
+        $data = ['song_id' => $songId, 'user_id' => $request->user_id];
 
         $addSongLike = SongPopular::create($data);
 
