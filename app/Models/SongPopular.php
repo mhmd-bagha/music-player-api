@@ -11,6 +11,7 @@ class SongPopular extends Model
     use HasFactory;
 
     protected $table = 'like_songs';
+    protected $fillable = ['song_id', 'user_id'];
 
     public function likes(): HasOne
     {
