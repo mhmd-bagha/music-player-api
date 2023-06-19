@@ -45,8 +45,13 @@ class SongPopularController extends Controller
 
         $songId = $validator->validated()['song_id'];
 
-        $removeSong = SongPopular::where('id', $songId)->where('user_id', $request->user_id)->first()->delete();
+        $getLike = SongPopular::where('song_id', $songId)->where('user_id', $request->user_id);
 
-        return ($removeSong) ? response()->json(['message' => 'song removed successfully', 'status' => 200]) : response()->json(['message' => 'an error has occurred', 'status' => 500]);
+        if (!$getLike->exists())
+            return response()->json(['message' => 'an error has occurred', 'status' => 500]);
+
+        $getLike->delete();
+
+        return response()->json(['message' => 'song removed successfully', 'status' => 200]);
     }
 }
