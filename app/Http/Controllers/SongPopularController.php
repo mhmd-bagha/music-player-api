@@ -16,7 +16,7 @@ class SongPopularController extends Controller
         return response()->json(['data' => $songsLiked, 'status' => 200]);
     }
 
-    public function addSongLike(Request $request): JsonResponse
+    public function addSongLike(Request $request, SongPopular $model): JsonResponse
     {
         $validator = Validator::make($request->post(), [
             'song_id' => 'required'
@@ -24,12 +24,15 @@ class SongPopularController extends Controller
         if ($validator->fails())
             return response()->json(['message' => $validator->errors(), 'status' => 417], 417);
 
+        $userId = $request->user_id;
         $songId = $validator->validated()['song_id'];
-        $data = ['song_id' => $songId, 'user_id' => $request->user_id];
+        $data = ['song_id' => $songId, 'user_id' => $userId];
 
-        $addSongLike = SongPopular::create($data);
+        $addSongLike = $model->create($data);
 
-        return ($addSongLike) ? response()->json(['message' => 'song added successfully', 'status' => 200]) : response()->json(['message' => 'an error has occurred', 'status' => 500]);
+        return ($addSongLike) ?
+            response()->json(['message' => 'song added successfully', 'status' => 200]) :
+            response()->json(['message' => 'an error has occurred', 'status' => 500]);
     }
 
     public function removeSongLike(Request $request): JsonResponse
