@@ -54,4 +54,11 @@ class SongPopularController extends Controller
 
         return response()->json(['message' => 'song removed successfully', 'status' => 200]);
     }
+
+    public function songsPopular(): JsonResponse
+    {
+        $songsPopular = SongPopular::inRandomOrder()->get();
+
+        return response()->json(['data' => $songsPopular, 'status' => 200]);
+    }
 }

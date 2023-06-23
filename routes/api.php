@@ -30,4 +30,5 @@ Route::prefix('album')->group(function () {
     Route::post('/songs/like', [SongPopularController::class, 'songsLiked'])->middleware(['jwt.auth', 'auth_user.jwt']);
     Route::post('/song/like/add', [SongPopularController::class, 'addSongLike'])->middleware(['jwt.auth', 'auth_user.jwt']);
     Route::post('/song/like/remove', [SongPopularController::class, 'removeSongLike'])->middleware(['jwt.auth', 'auth_user.jwt']);
+    Route::post('/songs-popular', [SongPopularController::class, 'songsPopular']);
 });
