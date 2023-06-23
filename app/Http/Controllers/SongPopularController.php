@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SongsResource;
 use App\Models\SongPopular;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 class SongPopularController extends Controller
@@ -57,8 +59,15 @@ class SongPopularController extends Controller
 
     public function songsPopular(): JsonResponse
     {
+        $songs = [];
         $songsPopular = SongPopular::inRandomOrder()->get();
 
-        return response()->json(['data' => $songsPopular, 'status' => 200]);
+        foreach ($songsPopular as $songPopular) {
+            $getSong = $songPopular->song()->first();
+            Arr::set($songs, $getSong->id, $getSong);
+        }
+        $songs = SongsResource::collection($songs);
+
+        return response()->json(['data' => $songs, 'status' => 200]);
     }
 }
